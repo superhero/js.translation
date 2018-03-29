@@ -6,7 +6,7 @@ Licence: [MIT](https://opensource.org/licenses/MIT)
 
 [![npm version](https://badge.fury.io/js/%40superhero%2Ftranslation.svg)](https://badge.fury.io/js/%40superhero%2Ftranslation)
 
-A debug utility for pretty log output..
+A translation module | pre-beta
 
 ## Install
 
