@@ -1,0 +1,15 @@
+{
+  "name"        :  "@superhero/translation",
+  "version"     :  "0.0.1",
+  "description" :  "Translation module",
+  "repository"  :  "git@github.com:superhero/js.translation.git",
+  "main"        :  "index.js",
+  "license"     :  "MIT",
+  "keywords"    : ["translater"],
+  "author"      :
+  {
+    "name"  : "Erik Landvall",
+    "email" : "erik@landvall.se",
+    "url"   : "http://erik.landvall.se"
+  }
+}
