@@ -1,6 +1,6 @@
 {
   "name"        :  "@superhero/translation",
-  "version"     :  "0.0.2",
+  "version"     :  "0.0.3",
   "description" :  "Translation module",
   "repository"  :  "git@github.com:superhero/js.translation.git",
   "main"        :  "index.js",

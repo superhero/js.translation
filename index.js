@@ -7,8 +7,8 @@ module.exports = class
     if(typeof translations != 'object')
       throw new Error('translations must be an object')
 
-    this.translations = translations || {}
-    this.options      = options
+    this.translations = translations  || {}
+    this.config       = options       || {}
   }
 
   fetchTranslation(key, ctx, ...lang)
@@ -23,7 +23,7 @@ module.exports = class
       ctx = [ctx]
 
     // flattens language param and appends the default fallback, filters empty
-    lang = [].concat.apply([], lang).concat(this.options.fallback).filter(_=>_)
+    lang = [].concat.apply([], lang).concat(this.config.fallback).filter(_=>_)
     if(key in this.translations)
       for(let i = 0; i < lang.length; i++)
         if(lang in this.translations[key])

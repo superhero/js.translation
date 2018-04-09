@@ -5,12 +5,16 @@ readFile  = util.promisify(fs.readFile)
 
 module.exports = class
 {
-  constructor(directory, options)
+  constructor(directory, handlebars, options)
   {
     if(typeof directory != 'string')
       throw new Error('directory required')
 
+    if(typeof handlebars != 'object')
+      throw new Error('handlebars required')
+
     this.directory  = directory
+    this.handlebars = handlebars
     this.config     = options || {}
   }
 
@@ -19,18 +23,15 @@ module.exports = class
     if(key == undefined)
       throw new Error(`translation key required`)
 
-    if(!ctx)
-      ctx = []
-
-    if(!Array.isArray(ctx))
-      ctx = [ctx]
-
     lang = [].concat.apply([], lang).concat(this.config.fallback).filter(_=>_)
     for(let i = 0; i < lang.length; i++)
       try
       {
-        const msg = await this.fetchTemplate(key, lang[i])
-        return util.format(msg, ...ctx)
+        const
+        source    = await this.fetchTemplate(key, lang[i]),
+        template  = this.handlebars.compile(source)
+
+        return template(ctx)
       }
       catch(error)
       {
