@@ -1,7 +1,6 @@
 const
 fs        = require('fs'),
-util      = require('util'),
-readFile  = util.promisify(fs.readFile)
+util      = require('util')
 
 module.exports = class
 {
@@ -15,10 +14,11 @@ module.exports = class
 
     this.directory  = directory
     this.handlebars = handlebars
-    this.config     = options || {}
+    this.config     = Object.assign({ cache:false }, options)
+    this.templates = {};
   }
 
-  async fetchTranslation(key, ctx, ...lang)
+  fetchTranslation(key, ctx, ...lang)
   {
     if(key == undefined)
       throw new Error(`translation key required`)
@@ -27,10 +27,7 @@ module.exports = class
     for(let i = 0; i < lang.length; i++)
       try
       {
-        const
-        source    = await this.fetchTemplate(key, lang[i]),
-        template  = this.handlebars.compile(source)
-
+        const template = this.fetchCompiledTemplate(key, lang[i])
         return template(ctx)
       }
       catch(error)
@@ -41,9 +38,23 @@ module.exports = class
     return key
   }
 
-  async fetchTemplate(key, lang)
+  fetchCompiledTemplate(key, lang)
   {
-    return readFile(`${this.directory}/${lang}/${key}`, 'utf-8')
+    if(!this.config.cache)
+      return this.handlebars.compile(this.fetchTemplate(key, lang))
+    
+    if(!lang in this.templates)
+      this.templates[lang] = {}
+    
+    if(!key in this.templates[lang])
+      this.templates[lang][key] = this.handlebars.compile(this.fetchTemplate(key, lang))
+    
+    return this.templates[lang][key]
+  }
+
+  fetchTemplate(key, lang)
+  {
+    return fs.readFileSync(`${this.directory}/${lang}/${key}`, 'utf-8')
   }
 
   setTranslation(key, lang, msg)
