@@ -14,7 +14,7 @@ module.exports = class
 
     this.directory  = directory
     this.handlebars = handlebars
-    this.config     = Object.assign({ cache : true }, options)
+    this.config     = Object.assign({ cache:false }, options)
     this.templates = {};
   }
 
